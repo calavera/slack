@@ -2,6 +2,7 @@ package slack
 
 import (
 	"net/http"
+	"net/url"
 )
 
 // SlashCommand contains information about a request of the slash command
@@ -26,20 +27,28 @@ func SlashCommandParse(r *http.Request) (s SlashCommand, err error) {
 	if err = r.ParseForm(); err != nil {
 		return s, err
 	}
-	s.Token = r.PostForm.Get("token")
-	s.TeamID = r.PostForm.Get("team_id")
-	s.TeamDomain = r.PostForm.Get("team_domain")
-	s.EnterpriseID = r.PostForm.Get("enterprise_id")
-	s.EnterpriseName = r.PostForm.Get("enterprise_name")
-	s.ChannelID = r.PostForm.Get("channel_id")
-	s.ChannelName = r.PostForm.Get("channel_name")
-	s.UserID = r.PostForm.Get("user_id")
-	s.UserName = r.PostForm.Get("user_name")
-	s.Command = r.PostForm.Get("command")
-	s.Text = r.PostForm.Get("text")
-	s.ResponseURL = r.PostForm.Get("response_url")
-	s.TriggerID = r.PostForm.Get("trigger_id")
-	return s, nil
+	
+	return SlashCommandParseValues(r.PostForm), nil
+}
+
+func SlashCommandParseValues(values url.Values) SlashCommand {
+	var s SlashCommand
+	
+	s.Token = values.Get("token")
+	s.TeamID = values.Get("team_id")
+	s.TeamDomain = values.Get("team_domain")
+	s.EnterpriseID = values.Get("enterprise_id")
+	s.EnterpriseName = values.Get("enterprise_name")
+	s.ChannelID = values.Get("channel_id")
+	s.ChannelName = values.Get("channel_name")
+	s.UserID = values.Get("user_id")
+	s.UserName = values.Get("user_name")
+	s.Command = values.Get("command")
+	s.Text = values.Get("text")
+	s.ResponseURL = values.Get("response_url")
+	s.TriggerID = values.Get("trigger_id")
+	
+	return s
 }
 
 // ValidateToken validates verificationTokens
