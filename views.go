@@ -12,6 +12,10 @@ const (
 
 type ViewType string
 
+type ViewState struct {
+	Values map[string]map[string]BlockAction `json:"values"`
+}
+
 type View struct {
 	SlackResponse
 	ID              string           `json:"id"`
@@ -23,7 +27,7 @@ type View struct {
 	Blocks          Blocks           `json:"blocks"`
 	PrivateMetadata string           `json:"private_metadata"`
 	CallbackID      string           `json:"callback_id"`
-	State           interface{}      `json:"state"`
+	State           ViewState        `json:"state"`
 	Hash            string           `json:"hash"`
 	ClearOnClose    bool             `json:"clear_on_close"`
 	NotifyOnClose   bool             `json:"notify_on_close"`
